@@ -1,4 +1,4 @@
-package com.example.examplemod.platform.services;
+package tfar.cropsandfarmsjava.platform.services;
 
 public interface IPlatformHelper {
 

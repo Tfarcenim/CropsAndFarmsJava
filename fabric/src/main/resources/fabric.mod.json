@@ -14,6 +14,7 @@
     "license": "${license}",
     "icon": "${mod_id}.png",
     "environment": "*",
+    "accessWidener": "cropsandfarmsjava.accesswidener",
     "entrypoints": {
         "main": [
           "tfar.cropsandfarmsjava.ExampleMod"

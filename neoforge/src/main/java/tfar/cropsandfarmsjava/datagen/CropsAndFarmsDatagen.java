@@ -5,6 +5,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import tfar.cropsandfarmsjava.CropsAndFarms;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -16,6 +17,9 @@ public class CropsAndFarmsDatagen {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         if (event.includeServer()) {
             generator.addProvider(true, CropsAndFarmsLootTableProvider.create(packOutput,lookupProvider));
+        }
+        if (event.includeClient()) {
+            generator.addProvider(true, new CropsAndFarmsLang(packOutput));
         }
     }
 

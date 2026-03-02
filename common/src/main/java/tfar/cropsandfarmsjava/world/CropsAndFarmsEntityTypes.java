@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import tfar.cropsandfarmsjava.CropsAndFarms;
+import tfar.cropsandfarmsjava.world.entity.HolsteinCowEntity;
 
 public class CropsAndFarmsEntityTypes {
     public static final EntityType<HolsteinCowEntity> HOLSTEIN_COW = register("holstein_cow",EntityType.Builder

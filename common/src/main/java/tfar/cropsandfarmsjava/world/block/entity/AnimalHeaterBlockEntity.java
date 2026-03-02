@@ -2,37 +2,128 @@ package tfar.cropsandfarmsjava.world.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.*;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.SculkCatalystBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.Nullable;
+import tfar.cropsandfarmsjava.world.AnimalHeaterMenu;
 import tfar.cropsandfarmsjava.world.CropsAndFarmsBlockEntityTypes;
 
 import java.util.List;
 
-public class AnimalHeaterBlockEntity extends BlockEntity implements EnergyBlockEntity{
+public class AnimalHeaterBlockEntity extends BlockEntity implements EnergyBlockEntity, MenuProvider, Nameable {
+
+    public static final MutableComponent DEFAULT_NAME = Component.translatable("container.cropsandfarms.animal_heater");
+
     public AnimalHeaterBlockEntity(BlockPos pos, BlockState blockState) {
         super(CropsAndFarmsBlockEntityTypes.ANIMAL_HEATER, pos, blockState);
     }
+
+    protected SimpleContainer container = new SimpleContainer(4) {
+
+        @Override
+        public void setChanged() {
+            AnimalHeaterBlockEntity.this.setChanged();
+        }
+
+        @Override
+        public void fromTag(ListTag tag, HolderLookup.Provider levelRegistry) {
+            int i;
+            for(i = 0; i < this.getContainerSize(); ++i) {
+                this.setItem(i, ItemStack.EMPTY);
+            }
+
+            for(i = 0; i < tag.size(); ++i) {
+                CompoundTag compoundTag = tag.getCompound(i);
+                int j = compoundTag.getByte("Slot") & 255;
+                if (j < this.getContainerSize()) {
+                    this.setItem(j, ItemStack.parse(levelRegistry, compoundTag).orElse(ItemStack.EMPTY));
+                }
+            }
+
+        }
+
+        @Override
+        public ListTag createTag(HolderLookup.Provider levelRegistry) {
+            ListTag listTag = new ListTag();
+
+            for(int i = 0; i < this.getContainerSize(); ++i) {
+                ItemStack itemStack = this.getItem(i);
+                if (!itemStack.isEmpty()) {
+                    CompoundTag compoundTag = new CompoundTag();
+                    compoundTag.putByte("Slot", (byte)i);
+                    listTag.add(itemStack.save(levelRegistry, compoundTag));
+                }
+            }
+
+            return listTag;
+        }
+    };
+
+    @Nullable
+    private Component name;
+
+    static final int ENERGY_MOST_SIG_BITS = 0;
+    static final int ENERGY_LEAST_SIG_BITS = 1;
+
+    private final ContainerData dataAccess = new ContainerData() {
+        @Override
+        public int get(int index) {
+            return switch (index) {
+                case ENERGY_MOST_SIG_BITS -> (int) energy;
+                case ENERGY_LEAST_SIG_BITS -> (int) energy;
+                default -> 0;
+            };
+        }
+
+        @Override
+        public void set(int index, int value) {
+            switch (index) {
+                case ENERGY_MOST_SIG_BITS:
+                    energy = value;
+                    break;
+                case ENERGY_LEAST_SIG_BITS:
+                    energy = value;
+                    break;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+    };
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.put("energy_storage",serializeEnergy());
+        tag.put("inventory",container.createTag(registries));
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         deserializeEnergy(tag.getCompound("energy_storage"));
+        container.fromTag(tag.getList("inventory", Tag.TAG_COMPOUND),registries);
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, AnimalHeaterBlockEntity animalHeaterBlockEntity) {
@@ -45,20 +136,20 @@ public class AnimalHeaterBlockEntity extends BlockEntity implements EnergyBlockE
 
     public void ageAnimals() {
         int r = 4;
-        List<? extends AgeableMob> entityList = level.getEntitiesOfClass(AgeableMob.class,new AABB(getBlockPos()).inflate(r), ageableMob -> {
-            return true;
-        });
+        List<? extends AgeableMob> entityList = level.getEntitiesOfClass(AgeableMob.class,new AABB(getBlockPos()).inflate(r), ageableMob -> true);
         for (AgeableMob ageableMob : entityList) {
-            ageableMob.ageUp(20);
-            ageableMob.addEffect(new MobEffectInstance(MobEffects.GLOWING,20));
+            ageableMob.ageUp(2);
+            ageableMob.addEffect(new MobEffectInstance(MobEffects.GLOWING,2));
         }
     }
 
     long energy;
 
+    public static final long CAPACITY = 1_000_000;
+
     @Override
     public long getCapacity() {
-        return 1_000_000;
+        return CAPACITY;
     }
 
     @Override
@@ -79,5 +170,49 @@ public class AnimalHeaterBlockEntity extends BlockEntity implements EnergyBlockE
             return true;
         }
         return false;
+    }
+
+
+    public void setCustomName(@Nullable Component name) {
+        this.name = name;
+    }
+
+    @Nullable
+    @Override
+    public Component getCustomName() {
+        return this.name;
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+        return new AnimalHeaterMenu(containerId, playerInventory, container, this.dataAccess, ContainerLevelAccess.create(this.level, this.getBlockPos()));
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return this.getName();
+    }
+
+    @Override
+    public Component getName() {
+        return this.name != null ? this.name : DEFAULT_NAME;
+    }
+
+    @Override
+    protected void applyImplicitComponents(BlockEntity.DataComponentInput componentInput) {
+        super.applyImplicitComponents(componentInput);
+        this.name = componentInput.get(DataComponents.CUSTOM_NAME);
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder components) {
+        super.collectImplicitComponents(components);
+        components.set(DataComponents.CUSTOM_NAME, this.name);
+    }
+
+    @Override
+    public void removeComponentsFromTag(CompoundTag tag) {
+        tag.remove("CustomName");
     }
 }

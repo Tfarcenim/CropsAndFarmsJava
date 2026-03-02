@@ -3,7 +3,9 @@ package tfar.cropsandfarmsjava.world.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -40,6 +42,17 @@ public class AnimalHeaterBlock extends Block implements EntityBlock {
             }
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof AnimalHeaterBlockEntity animalHeaterBlockEntity) {
+            if (!level.isClientSide) {
+                player.openMenu(animalHeaterBlockEntity);
+            }
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override

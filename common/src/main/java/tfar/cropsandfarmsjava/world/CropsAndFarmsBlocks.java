@@ -4,6 +4,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import tfar.cropsandfarmsjava.CropsAndFarms;
 import tfar.cropsandfarmsjava.world.block.AnimalHeaterBlock;
 
 public class CropsAndFarmsBlocks {
@@ -15,6 +16,6 @@ public class CropsAndFarmsBlocks {
     }
 
     public static Block register(String key, Block block) {
-        return Registry.register(BuiltInRegistries.BLOCK, key, block);
+        return Registry.register(BuiltInRegistries.BLOCK, CropsAndFarms.id(key), block);
     }
 }

@@ -10,10 +10,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import tfar.cropsandfarmsjava.datagen.CropsAndFarmsDatagen;
-import tfar.cropsandfarmsjava.world.CropsAndFarmsBlockEntityTypes;
-import tfar.cropsandfarmsjava.world.CropsAndFarmsBlocks;
-import tfar.cropsandfarmsjava.world.CropsAndFarmsEntityTypes;
-import tfar.cropsandfarmsjava.world.CropsAndFarmsItems;
+import tfar.cropsandfarmsjava.world.*;
 import tfar.cropsandfarmsjava.world.block.entity.AnimalHeaterBlockEntity;
 import tfar.cropsandfarmsjava.world.block.entity.EnergyBlockEntity;
 
@@ -43,6 +40,7 @@ public class CropsAndFarmsNeoforge {
             CropsAndFarmsItems.init();
             CropsAndFarmsBlockEntityTypes.init();
             CropsAndFarmsEntityTypes.init();
+            CropsAndFarmsMenuTypes.init();
         }
     }
 

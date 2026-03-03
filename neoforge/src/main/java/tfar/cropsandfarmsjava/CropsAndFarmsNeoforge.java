@@ -36,11 +36,7 @@ public class CropsAndFarmsNeoforge {
 
     void register(RegisterEvent event) {
         if (event.getRegistry() == BuiltInRegistries.BLOCK) {
-            CropsAndFarmsBlocks.init();
-            CropsAndFarmsItems.init();
-            CropsAndFarmsBlockEntityTypes.init();
-            CropsAndFarmsEntityTypes.init();
-            CropsAndFarmsMenuTypes.init();
+            CropsAndFarms.initRegistries();
         }
     }
 

@@ -1,6 +1,7 @@
 package tfar.cropsandfarmsjava.world.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
+import tfar.cropsandfarmsjava.platform.Services;
 import tfar.cropsandfarmsjava.world.CropsAndFarmsBlockEntityTypes;
 import tfar.cropsandfarmsjava.world.block.entity.AnimalHeaterBlockEntity;
 
@@ -49,7 +51,7 @@ public class AnimalHeaterBlock extends Block implements EntityBlock {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof AnimalHeaterBlockEntity animalHeaterBlockEntity) {
             if (!level.isClientSide) {
-                player.openMenu(animalHeaterBlockEntity);
+                Services.PLATFORM.openExtendedMenu((ServerPlayer) player,animalHeaterBlockEntity,pos);
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

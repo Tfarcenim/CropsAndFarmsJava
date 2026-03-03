@@ -17,8 +17,9 @@
     "accessWidener": "cropsandfarmsjava.accesswidener",
     "entrypoints": {
         "main": [
-          "tfar.cropsandfarmsjava.ExampleMod"
-        ]
+            "tfar.cropsandfarmsjava.CropsAndFarmsFabric"
+        ],
+        "client": ["tfar.cropsandfarmsjava.client.CropsAndFarmsClientFabric"]
     },
     "mixins": [
         "${mod_id}.mixins.json",
@@ -29,9 +30,6 @@
         "fabric-api": "*",
         "minecraft": ">=${minecraft_version}",
         "java": ">=${java_version}"
-    },
-    "suggests": {
-        "another-mod": "*"
     }
 }
   

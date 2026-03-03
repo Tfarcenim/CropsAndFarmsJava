@@ -16,6 +16,7 @@ public class CropsAndFarmsLang extends LanguageProvider {
     @Override
     protected void addTranslations() {
         addTextComponent(AnimalHeaterBlockEntity.DEFAULT_NAME,"Animal Heater");
+        addTextComponent(AnimalHeaterBlockEntity.UPGRADES,"Upgrades");
     }
 
     protected void addTextComponent(MutableComponent component, String text) {

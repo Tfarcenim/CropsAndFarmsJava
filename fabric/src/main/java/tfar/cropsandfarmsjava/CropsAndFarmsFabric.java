@@ -2,7 +2,7 @@ package tfar.cropsandfarmsjava;
 
 import net.fabricmc.api.ModInitializer;
 
-public class ExampleMod implements ModInitializer {
+public class CropsAndFarmsFabric implements ModInitializer {
     
     @Override
     public void onInitialize() {
@@ -12,7 +12,7 @@ public class ExampleMod implements ModInitializer {
         // project.
 
         // Use Fabric to bootstrap the Common mod.
-        CropsAndFarms.LOG.info("Hello Fabric world!");
+        CropsAndFarms.initRegistries();
         CropsAndFarms.init();
     }
 }

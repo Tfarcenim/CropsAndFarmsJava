@@ -32,6 +32,7 @@ import java.util.List;
 public class AnimalHeaterBlockEntity extends BlockEntity implements EnergyBlockEntity, MenuProvider, Nameable {
 
     public static final MutableComponent DEFAULT_NAME = Component.translatable("container.cropsandfarms.animal_heater");
+    public static final MutableComponent UPGRADES = Component.translatable("container.cropsandfarms.upgrades");
 
     public AnimalHeaterBlockEntity(BlockPos pos, BlockState blockState) {
         super(CropsAndFarmsBlockEntityTypes.ANIMAL_HEATER, pos, blockState);
@@ -81,15 +82,16 @@ public class AnimalHeaterBlockEntity extends BlockEntity implements EnergyBlockE
     @Nullable
     private Component name;
 
-    static final int ENERGY_MOST_SIG_BITS = 0;
-    static final int ENERGY_LEAST_SIG_BITS = 1;
 
     private final ContainerData dataAccess = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
-                case ENERGY_MOST_SIG_BITS -> (int) energy;
-                case ENERGY_LEAST_SIG_BITS -> (int) energy;
+                case 0,1,2,3-> {
+                    int shift = (3 - index) * 16;
+                    int i = (int) ((energy >> shift) & 0xffff);
+                    yield i;
+                }
                 default -> 0;
             };
         }
@@ -97,18 +99,12 @@ public class AnimalHeaterBlockEntity extends BlockEntity implements EnergyBlockE
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case ENERGY_MOST_SIG_BITS:
-                    energy = value;
-                    break;
-                case ENERGY_LEAST_SIG_BITS:
-                    energy = value;
-                    break;
             }
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     };
 
@@ -128,19 +124,28 @@ public class AnimalHeaterBlockEntity extends BlockEntity implements EnergyBlockE
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, AnimalHeaterBlockEntity animalHeaterBlockEntity) {
         if (animalHeaterBlockEntity.energy > 0) {
-            animalHeaterBlockEntity.energy-=20;
-            animalHeaterBlockEntity.ageAnimals();
-            animalHeaterBlockEntity.setChanged();
+            if (animalHeaterBlockEntity.ageAnimals()) {
+                animalHeaterBlockEntity.energy -= 20;
+                animalHeaterBlockEntity.ageAnimals();
+                animalHeaterBlockEntity.setChanged();
+            }
+        }
+        if (!animalHeaterBlockEntity.container.getItem(0).isEmpty()) {
+            if (animalHeaterBlockEntity.energy + COAL_ENERGY <= animalHeaterBlockEntity.getCapacity()) {
+                animalHeaterBlockEntity.container.removeItem(0, 1);
+                animalHeaterBlockEntity.energy+=COAL_ENERGY;
+            }
         }
     }
 
-    public void ageAnimals() {
+    public boolean ageAnimals() {
         int r = 4;
         List<? extends AgeableMob> entityList = level.getEntitiesOfClass(AgeableMob.class,new AABB(getBlockPos()).inflate(r), ageableMob -> true);
         for (AgeableMob ageableMob : entityList) {
             ageableMob.ageUp(2);
             ageableMob.addEffect(new MobEffectInstance(MobEffects.GLOWING,2));
         }
+        return !entityList.isEmpty();
     }
 
     long energy;
@@ -186,7 +191,7 @@ public class AnimalHeaterBlockEntity extends BlockEntity implements EnergyBlockE
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        return new AnimalHeaterMenu(containerId, playerInventory, container, this.dataAccess, ContainerLevelAccess.create(this.level, this.getBlockPos()));
+        return new AnimalHeaterMenu(containerId, playerInventory, container, this.dataAccess,this.getBlockPos());
     }
 
     @Override

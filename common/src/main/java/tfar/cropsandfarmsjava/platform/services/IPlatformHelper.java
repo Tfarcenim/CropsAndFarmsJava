@@ -1,5 +1,14 @@
 package tfar.cropsandfarmsjava.platform.services;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import tfar.cropsandfarmsjava.world.CAFMenuTypes;
+
 public interface IPlatformHelper {
 
     /**
@@ -33,4 +42,14 @@ public interface IPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
+
+    <T extends AbstractContainerMenu,D> MenuType<T> createExtended(CAFMenuTypes.ExtendedMenuSupplier<T,D> extendedMenu,
+                                                                   StreamCodec<? super RegistryFriendlyByteBuf,D> streamCodec);
+
+    <D> void openExtendedMenu(ServerPlayer player, MenuProvider menuProvider, D data, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec);
+
+    default void openExtendedMenu(ServerPlayer player, MenuProvider menuProvider, BlockPos pos) {
+        openExtendedMenu(player,menuProvider,pos,BlockPos.STREAM_CODEC);
+    }
+
 }

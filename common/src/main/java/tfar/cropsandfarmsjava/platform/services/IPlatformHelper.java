@@ -3,6 +3,7 @@ package tfar.cropsandfarmsjava.platform.services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -51,5 +52,7 @@ public interface IPlatformHelper {
     default void openExtendedMenu(ServerPlayer player, MenuProvider menuProvider, BlockPos pos) {
         openExtendedMenu(player,menuProvider,pos,BlockPos.STREAM_CODEC);
     }
+
+    <T> void registerDataSerializer(EntityDataSerializer<T> serializer);
 
 }

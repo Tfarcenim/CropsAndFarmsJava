@@ -1,12 +1,16 @@
 package tfar.cropsandfarmsjava.platform;
 
+import net.minecraft.core.Registry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import tfar.cropsandfarmsjava.CropsAndFarms;
 import tfar.cropsandfarmsjava.platform.services.IPlatformHelper;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
@@ -44,5 +48,10 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public <D> void openExtendedMenu(ServerPlayer player, MenuProvider menuProvider, D data, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec) {
         player.openMenu(menuProvider,buf -> streamCodec.encode(buf,data));
+    }
+
+    @Override
+    public <T> void registerDataSerializer(EntityDataSerializer<T> serializer) {
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, CropsAndFarms.id("sex"),serializer);
     }
 }

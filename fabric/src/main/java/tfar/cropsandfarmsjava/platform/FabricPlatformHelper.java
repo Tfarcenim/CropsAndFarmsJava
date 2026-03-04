@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -70,4 +72,8 @@ public class FabricPlatformHelper implements IPlatformHelper {
         player.openMenu(extendedScreenHandlerFactory);
     }
 
+    @Override
+    public <T> void registerDataSerializer(EntityDataSerializer<T> serializer) {
+        EntityDataSerializers.registerSerializer(serializer);
+    }
 }

@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"Walking": {
+		"move.walk": {
 			"loop": true,
 			"animation_length": 1.0833,
 			"bones": {
@@ -173,7 +173,7 @@
 				}
 			}
 		},
-		"Eating": {
+		"misc.eat": {
 			"animation_length": 2,
 			"bones": {
 				"Body": {
@@ -464,7 +464,7 @@
 				}
 			}
 		},
-		"Head Shake": {
+		"misc.head_shake": {
 			"animation_length": 0.9583,
 			"bones": {
 				"Head": {
@@ -505,7 +505,7 @@
 				}
 			}
 		},
-		"Ear Flick": {
+		"misc.ear_flick": {
 			"animation_length": 0.5417,
 			"bones": {
 				"Head": {
@@ -561,7 +561,7 @@
 				}
 			}
 		},
-		"Death": {
+		"misc.die": {
 			"loop": true,
 			"animation_length": 1.7917,
 			"bones": {

@@ -7,6 +7,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Cow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tfar.cropsandfarmsjava.network.CropsAndFarmsEntityDataSerializers;
 import tfar.cropsandfarmsjava.world.*;
 
 import java.util.function.BiConsumer;
@@ -33,6 +34,7 @@ public class CropsAndFarms {
         CropsAndFarmsBlockEntityTypes.init();
         CropsAndFarmsEntityTypes.init();
         CAFMenuTypes.init();
+        CropsAndFarmsEntityDataSerializers.init();
     }
 
     public static void createAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier> consumer) {

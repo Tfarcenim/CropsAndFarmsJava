@@ -53,6 +53,6 @@ public interface IPlatformHelper {
         openExtendedMenu(player,menuProvider,pos,BlockPos.STREAM_CODEC);
     }
 
-    <T> void registerDataSerializer(EntityDataSerializer<T> serializer);
+    <T> void registerDataSerializer(String key,EntityDataSerializer<T> serializer);
 
 }

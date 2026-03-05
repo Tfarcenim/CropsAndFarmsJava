@@ -51,7 +51,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public <T> void registerDataSerializer(EntityDataSerializer<T> serializer) {
-        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, CropsAndFarms.id("sex"),serializer);
+    public <T> void registerDataSerializer(String key, EntityDataSerializer<T> serializer) {
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, CropsAndFarms.id(key),serializer);
     }
 }

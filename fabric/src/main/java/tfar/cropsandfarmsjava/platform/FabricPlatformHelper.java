@@ -73,7 +73,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public <T> void registerDataSerializer(EntityDataSerializer<T> serializer) {
+    public <T> void registerDataSerializer(String key, EntityDataSerializer<T> serializer) {
         EntityDataSerializers.registerSerializer(serializer);
     }
 }

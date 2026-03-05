@@ -9,7 +9,7 @@ import tfar.cropsandfarmsjava.CropsAndFarms;
 import tfar.cropsandfarmsjava.world.entity.FancyCowEntity;
 
 public class CropsAndFarmsEntityTypes {
-    public static final EntityType<FancyCowEntity> HOLSTEIN_COW = register("holstein_cow",EntityType.Builder
+    public static final EntityType<FancyCowEntity> FANCY_COW = register("fancy_cow",EntityType.Builder
             .of(FancyCowEntity::new, MobCategory.CREATURE)
             .sized(0.9F, 1.4F).eyeHeight(1.3F).passengerAttachments(1.36875F).clientTrackingRange(10));
 

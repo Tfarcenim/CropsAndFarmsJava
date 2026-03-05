@@ -10,8 +10,8 @@ public class CropsAndFarmsEntityDataSerializers {
     public static final EntityDataSerializer<FancyCowEntity.Variant> COW_VARIANT = EntityDataSerializer.forValueType(FancyCowEntity.Variant.STREAM_CODEC);
 
     static {
-        Services.PLATFORM.registerDataSerializer(SEX);
-        Services.PLATFORM.registerDataSerializer(COW_VARIANT);
+        Services.PLATFORM.registerDataSerializer("sex", SEX);
+        Services.PLATFORM.registerDataSerializer("cow_variant", COW_VARIANT);
     }
 
     public static void init() {

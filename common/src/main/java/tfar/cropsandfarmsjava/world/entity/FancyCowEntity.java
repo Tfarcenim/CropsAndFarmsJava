@@ -56,7 +56,7 @@ public class FancyCowEntity extends Cow implements GeoEntity {
     }
 
     public void setVariant(Variant variant) {
-        entityData.get(VARIANT);
+        entityData.set(VARIANT,variant);
     }
 
     @Override

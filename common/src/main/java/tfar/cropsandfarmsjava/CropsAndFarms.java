@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tfar.cropsandfarmsjava.network.CropsAndFarmsEntityDataSerializers;
 import tfar.cropsandfarmsjava.world.*;
+import tfar.cropsandfarmsjava.world.item.CropsAndFarmsItems;
 
 import java.util.function.BiConsumer;
 
@@ -38,7 +39,7 @@ public class CropsAndFarms {
     }
 
     public static void createAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier> consumer) {
-        consumer.accept(CropsAndFarmsEntityTypes.HOLSTEIN_COW, Cow.createAttributes().build());
+        consumer.accept(CropsAndFarmsEntityTypes.FANCY_COW, Cow.createAttributes().build());
     }
 
     public static ResourceLocation id(String path) {
